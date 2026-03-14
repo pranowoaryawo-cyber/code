@@ -1,0 +1,129 @@
+{
+  "id": "task_mm48tul8_nxtxzxk",
+  "description": "创建一个 React Todo 应用",
+  "priority": 1,
+  "status": "completed",
+  "subTasks": [
+    {
+      "id": "subtask_mm48tul9_0ekbt3m",
+      "description": "创建项目结构",
+      "dependencies": [],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:58:35.808Z",
+      "result": {
+        "created": true
+      },
+      "endTime": "2026-02-27T01:58:35.813Z",
+      "actualDuration": 0.005
+    },
+    {
+      "id": "subtask_mm48tul9_u00veem",
+      "description": "安装依赖",
+      "dependencies": [
+        "subtask_mm48tul9_0ekbt3m"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:58:35.813Z",
+      "result": {
+        "installed": true
+      },
+      "endTime": "2026-02-27T01:58:35.829Z",
+      "actualDuration": 0.016
+    },
+    {
+      "id": "subtask_mm48tul9_n453utb",
+      "description": "创建组件",
+      "dependencies": [
+        "subtask_mm48tul9_u00veem"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:58:35.829Z",
+      "result": {
+        "created": true
+      },
+      "endTime": "2026-02-27T01:58:35.850Z",
+      "actualDuration": 0.021
+    },
+    {
+      "id": "subtask_mm48tul9_7bp2wne",
+      "description": "实现业务逻辑",
+      "dependencies": [
+        "subtask_mm48tul9_n453utb"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:58:35.850Z",
+      "result": {
+        "code": "/**\n * 实现业务逻辑\n */\n\nexport class BusinessLogic {\n  constructor() {\n    // 初始化\n  }\n\n  a() {\n    // 实现业务逻辑\n    console.log('执行业务逻辑')\n  }\n}\n\nexport default BusinessLogic\n",
+        "filename": "src/logic/business.ts"
+      },
+      "endTime": "2026-02-27T01:58:35.855Z",
+      "actualDuration": 0.005
+    },
+    {
+      "id": "subtask_mm48tul9_6861maw",
+      "description": "添加样式",
+      "dependencies": [
+        "subtask_mm48tul9_n453utb"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:58:35.850Z",
+      "result": {
+        "code": "/* 添加样式 */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;\n  line-height: 1.6;\n}\n\n.container {\n  max-width: 1200px;\n  margin: 0 auto;\n  padding: 20px;\n}\n",
+        "filename": "src/styles/main.css"
+      },
+      "endTime": "2026-02-27T01:58:35.855Z",
+      "actualDuration": 0.005
+    },
+    {
+      "id": "subtask_mm48tul9_ft0wfw5",
+      "description": "编写测试",
+      "dependencies": [
+        "subtask_mm48tul9_7bp2wne"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:58:35.855Z",
+      "result": {
+        "passed": true,
+        "tests": 0,
+        "failures": 0
+      },
+      "endTime": "2026-02-27T01:58:35.855Z",
+      "actualDuration": 0
+    },
+    {
+      "id": "subtask_mm48tul9_fna80ar",
+      "description": "构建项目",
+      "dependencies": [
+        "subtask_mm48tul9_ft0wfw5",
+        "subtask_mm48tul9_6861maw"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:58:35.855Z",
+      "result": {
+        "built": true,
+        "outputDir": "dist"
+      },
+      "endTime": "2026-02-27T01:58:35.855Z",
+      "actualDuration": 0
+    }
+  ],
+  "context": {},
+  "checkpoints": [],
+  "createdAt": "2026-02-27T01:58:35.805Z",
+  "updatedAt": "2026-02-27T01:58:35.855Z",
+  "completedAt": "2026-02-27T01:58:35.855Z"
+}

@@ -1,0 +1,87 @@
+{
+  "id": "task_mm479bkm_g4of205",
+  "description": "创建一个 React Todo 应用",
+  "priority": 1,
+  "status": "failed",
+  "subTasks": [
+    {
+      "id": "subtask_mm479bkm_g1lvy1i",
+      "description": "创建项目结构",
+      "dependencies": [],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:14:38.426Z",
+      "result": {
+        "created": true
+      },
+      "endTime": "2026-02-27T01:14:38.426Z",
+      "actualDuration": 0
+    },
+    {
+      "id": "subtask_mm479bkm_d87qkjw",
+      "description": "安装依赖",
+      "dependencies": [
+        "创建项目结构"
+      ],
+      "status": "pending",
+      "retryCount": 0,
+      "maxRetries": 3
+    },
+    {
+      "id": "subtask_mm479bkm_00zqoor",
+      "description": "创建组件",
+      "dependencies": [
+        "安装依赖"
+      ],
+      "status": "pending",
+      "retryCount": 0,
+      "maxRetries": 3
+    },
+    {
+      "id": "subtask_mm479bkm_8jjl813",
+      "description": "实现业务逻辑",
+      "dependencies": [
+        "创建组件"
+      ],
+      "status": "pending",
+      "retryCount": 0,
+      "maxRetries": 3
+    },
+    {
+      "id": "subtask_mm479bkm_uggxbif",
+      "description": "添加样式",
+      "dependencies": [
+        "创建组件"
+      ],
+      "status": "pending",
+      "retryCount": 0,
+      "maxRetries": 3
+    },
+    {
+      "id": "subtask_mm479bkm_iqwh76y",
+      "description": "编写测试",
+      "dependencies": [
+        "实现业务逻辑"
+      ],
+      "status": "pending",
+      "retryCount": 0,
+      "maxRetries": 3
+    },
+    {
+      "id": "subtask_mm479bkm_yz1ewhx",
+      "description": "构建项目",
+      "dependencies": [
+        "编写测试",
+        "添加样式"
+      ],
+      "status": "pending",
+      "retryCount": 0,
+      "maxRetries": 3
+    }
+  ],
+  "context": {},
+  "checkpoints": [],
+  "createdAt": "2026-02-27T01:14:38.422Z",
+  "updatedAt": "2026-02-27T01:14:38.426Z"
+}

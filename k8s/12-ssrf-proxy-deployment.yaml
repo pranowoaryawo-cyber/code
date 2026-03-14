@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssrf-proxy
+  namespace: dify-plus
+  labels:
+    app.kubernetes.io/name: ssrf-proxy
+    app.kubernetes.io/component: proxy
+    app.kubernetes.io/part-of: dify-plus
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssrf-proxy
+      app.kubernetes.io/component: proxy
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssrf-proxy
+        app.kubernetes.io/component: proxy
+        app.kubernetes.io/part-of: dify-plus
+    spec:
+      containers:
+        - name: ssrf-proxy
+          image: harbor.hkbluelans.com/dify/ubuntu-squid:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3128
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: dify-plus-ssrf-proxy-config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"

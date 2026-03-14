@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sandbox-config-file
+  namespace: dify-plus
+  labels:
+    app.kubernetes.io/name: sandbox-config
+    app.kubernetes.io/component: sandbox
+    app.kubernetes.io/part-of: dify-plus
+data:
+  config.yaml: |
+    app:
+      port: 8194
+      debug: True
+      key: dify-sandbox
+    max_workers: 4
+    max_requests: 50
+    worker_timeout: 5
+    python_path: /usr/local/bin/python3
+    enable_network: True
+    allowed_syscalls: []
+    proxy:
+      socks5: ''
+      http: ''
+      https: ''

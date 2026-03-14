@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: dify-plus
+  labels:
+    app.kubernetes.io/name: web
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: dify-plus
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: web
+      app.kubernetes.io/component: frontend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: web
+        app.kubernetes.io/component: frontend
+        app.kubernetes.io/part-of: dify-plus
+    spec:
+      containers:
+        - name: web
+          image: harbor.hkbluelans.com/dify/dify-plus-web:1.11.4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: dify-plus-web-config
+          env:
+            # 动态构建 API URL 使用环境变量
+            - name: CONSOLE_API_URL
+              value: "$(DIFY_PROTOCOL)://$(DIFY_DOMAIN)"
+            - name: APP_API_URL
+              value: "$(DIFY_PROTOCOL)://$(DIFY_DOMAIN)"
+            # Next.js 客户端变量 (覆盖 ConfigMap 中的静态值)
+            - name: NEXT_PUBLIC_API_PREFIX
+              value: "$(DIFY_PROTOCOL)://$(DIFY_DOMAIN)/console/api"
+            - name: NEXT_PUBLIC_PUBLIC_API_PREFIX
+              value: "$(DIFY_PROTOCOL)://$(DIFY_DOMAIN)/api"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - web
+                topologyKey: kubernetes.io/hostname

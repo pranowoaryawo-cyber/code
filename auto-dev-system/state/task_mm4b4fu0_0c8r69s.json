@@ -1,0 +1,145 @@
+{
+  "id": "task_mm4b4fu0_0c8r69s",
+  "description": "创建一个 RESTful API 服务",
+  "priority": 1,
+  "status": "completed",
+  "subTasks": [
+    {
+      "id": "subtask_mm4b4fu1_vhkfc1y",
+      "description": "创建项目结构",
+      "dependencies": [],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T03:02:49.133Z",
+      "result": {
+        "created": true
+      },
+      "endTime": "2026-02-27T03:02:49.138Z",
+      "actualDuration": 0.005
+    },
+    {
+      "id": "subtask_mm4b4fu1_j1uplo7",
+      "description": "安装依赖",
+      "dependencies": [
+        "subtask_mm4b4fu1_vhkfc1y"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T03:02:49.138Z",
+      "result": {
+        "installed": true
+      },
+      "endTime": "2026-02-27T03:02:49.142Z",
+      "actualDuration": 0.004
+    },
+    {
+      "id": "subtask_mm4b4fu1_7skoesp",
+      "description": "定义数据模型",
+      "dependencies": [
+        "subtask_mm4b4fu1_j1uplo7"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T03:02:49.142Z",
+      "result": {
+        "code": "// 定义数据模型\n\nconsole.log('Hello World')\n",
+        "filename": "src/index.ts"
+      },
+      "endTime": "2026-02-27T03:02:49.144Z",
+      "actualDuration": 0.002
+    },
+    {
+      "id": "subtask_mm4b4fu1_phquhyz",
+      "description": "实现路由",
+      "dependencies": [
+        "subtask_mm4b4fu1_7skoesp"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T03:02:49.144Z",
+      "result": {
+        "code": "// 实现路由\n\nconsole.log('Hello World')\n",
+        "filename": "src/index.ts"
+      },
+      "endTime": "2026-02-27T03:02:49.151Z",
+      "actualDuration": 0.007
+    },
+    {
+      "id": "subtask_mm4b4fu1_g5d96v2",
+      "description": "实现控制器",
+      "dependencies": [
+        "subtask_mm4b4fu1_phquhyz"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T03:02:49.151Z",
+      "result": {
+        "code": "// 实现控制器\n\nconsole.log('Hello World')\n",
+        "filename": "src/index.ts"
+      },
+      "endTime": "2026-02-27T03:02:49.152Z",
+      "actualDuration": 0.001
+    },
+    {
+      "id": "subtask_mm4b4fu1_wcrwesj",
+      "description": "添加中间件",
+      "dependencies": [
+        "subtask_mm4b4fu1_g5d96v2"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T03:02:49.152Z",
+      "result": {
+        "code": "// 添加中间件\n\nconsole.log('Hello World')\n",
+        "filename": "src/index.ts"
+      },
+      "endTime": "2026-02-27T03:02:49.155Z",
+      "actualDuration": 0.003
+    },
+    {
+      "id": "subtask_mm4b4fu1_pi7zm82",
+      "description": "编写测试",
+      "dependencies": [
+        "subtask_mm4b4fu1_wcrwesj"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T03:02:49.155Z",
+      "result": {
+        "passed": true,
+        "tests": 0,
+        "failures": 0
+      },
+      "endTime": "2026-02-27T03:02:49.156Z",
+      "actualDuration": 0.001
+    },
+    {
+      "id": "subtask_mm4b4fu1_gioahdj",
+      "description": "生成文档",
+      "dependencies": [
+        "subtask_mm4b4fu1_pi7zm82"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T03:02:49.156Z",
+      "result": {
+        "created": true
+      },
+      "endTime": "2026-02-27T03:02:49.159Z",
+      "actualDuration": 0.003
+    }
+  ],
+  "context": {},
+  "checkpoints": [],
+  "createdAt": "2026-02-27T03:02:49.129Z",
+  "updatedAt": "2026-02-27T03:02:49.159Z",
+  "completedAt": "2026-02-27T03:02:49.159Z"
+}

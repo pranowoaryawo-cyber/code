@@ -1,0 +1,11 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "description": "生成文档",
+  "main": "index.js",
+  "scripts": {
+    "start": "echo \"Start command\"",
+    "build": "echo \"Build command\"",
+    "test": "echo \"Test command\""
+  }
+}

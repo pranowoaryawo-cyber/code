@@ -80,7 +80,7 @@ x-shared-env: &shared-api-worker-env
   MYSQL_INNODB_LOG_FILE_SIZE: ${MYSQL_INNODB_LOG_FILE_SIZE:-128M}
   MYSQL_INNODB_FLUSH_LOG_AT_TRX_COMMIT: ${MYSQL_INNODB_FLUSH_LOG_AT_TRX_COMMIT:-2}
   REDIS_HOST: ${REDIS_HOST:-redis}
-  REDIS_PORT: ${REDIS_PORT:-6379}
+  REDIS_PORT: ${REDIS_PORT:-6380}
   REDIS_USERNAME: ${REDIS_USERNAME:-}
   REDIS_PASSWORD: ${REDIS_PASSWORD:-difyai123456}
   REDIS_USE_SSL: ${REDIS_USE_SSL:-false}
@@ -98,7 +98,7 @@ x-shared-env: &shared-api-worker-env
   REDIS_USE_CLUSTERS: ${REDIS_USE_CLUSTERS:-false}
   REDIS_CLUSTERS: ${REDIS_CLUSTERS:-}
   REDIS_CLUSTERS_PASSWORD: ${REDIS_CLUSTERS_PASSWORD:-}
-  CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://:difyai123456@redis:6379/1}
+  CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://:difyai123456@redis:6380/1}
   CELERY_BACKEND: ${CELERY_BACKEND:-redis}
   BROKER_USE_SSL: ${BROKER_USE_SSL:-false}
   CELERY_USE_SENTINEL: ${CELERY_USE_SENTINEL:-false}
@@ -717,7 +717,7 @@ services:
 
   # API service
   api:
-    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-api:1.11.4-fix.1
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-api:1.11.4
     restart: always
     environment:
       # Use the shared environment variables.
@@ -761,7 +761,7 @@ services:
   # worker service
   # The Celery worker for processing all queues (dataset, workflow, mail, etc.)
   worker:
-    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-api:1.11.4-fix.1
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-api:1.11.4
     restart: always
     environment:
       # Use the shared environment variables.
@@ -800,7 +800,7 @@ services:
   # worker-gaia service
   # The Celery worker-gaia for processing the queue.
   worker-gaia:
-    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-api:1.11.4-fix.1
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-api:1.11.4
     restart: always
     environment:
       # Use the shared environment variables.
@@ -826,7 +826,7 @@ services:
   # worker-dataset service
   # The Celery worker-dataset for processing the queue.
   worker-dataset:
-    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-api:1.11.4-fix.1
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-api:1.11.4
     restart: always
     environment:
       # Use the shared environment variables.
@@ -852,7 +852,7 @@ services:
   # worker_beat service
   # Celery beat for scheduling periodic tasks.
   worker_beat:
-    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-api:1.11.4-fix.1
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-api:1.11.4
     restart: always
     environment:
       # Use the shared environment variables.
@@ -882,11 +882,11 @@ services:
 
   # Frontend web application.
   web:
-    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-web:1.11.4-fix.1
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-web:1.11.4
     restart: always
     environment:
-      CONSOLE_API_URL: ${CONSOLE_API_URL:-}
-      APP_API_URL: ${APP_API_URL:-}
+      CONSOLE_API_URL: http://192.168.88.138:81
+      APP_API_URL: http://192.168.88.138:81
       AMPLITUDE_API_KEY: ${AMPLITUDE_API_KEY:-}
       NEXT_PUBLIC_COOKIE_DOMAIN: ${NEXT_PUBLIC_COOKIE_DOMAIN:-}
       SENTRY_DSN: ${WEB_SENTRY_DSN:-}
@@ -994,7 +994,7 @@ services:
           "redis-cli -a ${REDIS_PASSWORD:-difyai123456} ping | grep -q PONG",
         ]
     ports:
-      - 6379:6379
+      - 6380:6379
 
   # The DifySandbox
   sandbox:

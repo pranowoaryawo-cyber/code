@@ -1,0 +1,115 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dify-plus-ingress
+  namespace: dify-plus
+  labels:
+    app.kubernetes.io/name: dify-plus-ingress
+    app.kubernetes.io/component: gateway
+    app.kubernetes.io/part-of: dify-plus
+  annotations:
+    # Nginx Ingress Controller 配置
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: difyplus.hkbluelans.com
+      http:
+        paths:
+          # Admin API - 必须放在 /admin 之前，否则会被 /admin 匹配
+          - path: /admin/api
+            pathType: Prefix
+            backend:
+              service:
+                name: admin-server
+                port:
+                  number: 8888
+          
+          # Admin Web UI - 代理到 admin-web
+          - path: /admin
+            pathType: Prefix
+            backend:
+              service:
+                name: admin-web
+                port:
+                  number: 8081
+
+          # API 路由
+          - path: /console/api
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 5001
+          
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 5001
+          
+          - path: /v1
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 5001
+          
+          - path: /files
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 5001
+          
+          - path: /mcp
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 5001
+          
+          - path: /triggers
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 5001
+          
+          # 插件 Webhook 路由
+          - path: /e/
+            pathType: Prefix
+            backend:
+              service:
+                name: plugin-daemon
+                port:
+                  number: 5002
+          
+          # Explore 路由
+          - path: /explore
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 3000
+          
+          # 默认路由 - Web 前端
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 3000

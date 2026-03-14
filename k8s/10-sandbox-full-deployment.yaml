@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sandbox-full
+  namespace: dify-plus
+  labels:
+    app.kubernetes.io/name: sandbox-full
+    app.kubernetes.io/component: sandbox
+    app.kubernetes.io/part-of: dify-plus
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sandbox-full
+      app.kubernetes.io/component: sandbox
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: sandbox-full
+        app.kubernetes.io/component: sandbox
+        app.kubernetes.io/part-of: dify-plus
+    spec:
+      containers:
+        - name: sandbox-full
+          image: harbor.hkbluelans.com/dify/dify-plus-sandbox-full:1.2.2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8194
+              protocol: TCP
+          env:
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dify-plus-secrets
+                  key: SANDBOX_API_KEY
+            - name: GIN_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-sandbox-config
+                  key: GIN_MODE
+            - name: WORKER_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-sandbox-config
+                  key: WORKER_TIMEOUT
+            - name: ENABLE_NETWORK
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-sandbox-config
+                  key: ENABLE_NETWORK
+            - name: HTTP_PROXY
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-sandbox-config
+                  key: HTTP_PROXY
+            - name: HTTPS_PROXY
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-sandbox-config
+                  key: HTTPS_PROXY
+            - name: SANDBOX_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-sandbox-config
+                  key: SANDBOX_PORT
+          volumeMounts:
+            - name: sandbox-dependencies
+              mountPath: /dependencies
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8194
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8194
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+      volumes:
+        - name: sandbox-dependencies
+          persistentVolumeClaim:
+            claimName: sandbox-dependencies-pvc

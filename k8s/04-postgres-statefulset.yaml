@@ -1,0 +1,181 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db-postgres
+  namespace: dify-plus
+  labels:
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: dify-plus
+spec:
+  serviceName: db-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postgres
+      app.kubernetes.io/component: database
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: postgres
+        app.kubernetes.io/component: database
+        app.kubernetes.io/part-of: dify-plus
+    spec:
+      # [新增] 初始化容器：修复挂载卷权限
+      initContainers:
+        - name: init-chmod-data
+          image: harbor.hkbluelans.com/dify/postgres:15-alpine
+          imagePullPolicy: IfNotPresent
+          # 强制将数据目录归属权交给 postgres 用户 (UID 999)
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /var/lib/postgresql/data/pgdata
+              chmod 700 /var/lib/postgresql/data/pgdata
+              find /var/lib/postgresql/data -maxdepth 2 -not -name "." -not -name ".." -exec chown -R 999:999 {} +
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres-db-files
+
+      containers:
+        - name: postgres
+          image: harbor.hkbluelans.com/dify/postgres:15-alpine
+          imagePullPolicy: IfNotPresent
+          
+          # [修改] 明确指定运行用户，避免 root 启动报错
+          securityContext:
+            runAsUser: 999
+            runAsGroup: 999
+            
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+              
+          # [修改] 使用 K8s 变量注入方式传递运行时参数
+          args:
+            - postgres
+            - -c
+            - max_connections=$(POSTGRES_MAX_CONNECTIONS)
+            - -c
+            - shared_buffers=$(POSTGRES_SHARED_BUFFERS)
+            - -c
+            - work_mem=$(POSTGRES_WORK_MEM)
+            - -c
+            - maintenance_work_mem=$(POSTGRES_MAINTENANCE_WORK_MEM)
+            - -c
+            - effective_cache_size=$(POSTGRES_EFFECTIVE_CACHE_SIZE)
+            - -c
+            - statement_timeout=$(POSTGRES_STATEMENT_TIMEOUT)
+            - -c
+            - idle_in_transaction_session_timeout=$(POSTGRES_IDLE_IN_TRANSACTION_SESSION_TIMEOUT)
+
+          env:
+            # 基础连接信息
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-postgres-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-postgres-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dify-plus-secrets
+                  key: DB_PASSWORD
+            # [修改] PGDATA 路径需与挂载路径一致
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            
+            # 性能调优参数 (从 ConfigMap 读取)
+            - name: POSTGRES_MAX_CONNECTIONS
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-common-config
+                  key: POSTGRES_MAX_CONNECTIONS
+            - name: POSTGRES_SHARED_BUFFERS
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-common-config
+                  key: POSTGRES_SHARED_BUFFERS
+            - name: POSTGRES_WORK_MEM
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-common-config
+                  key: POSTGRES_WORK_MEM
+            - name: POSTGRES_MAINTENANCE_WORK_MEM
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-common-config
+                  key: POSTGRES_MAINTENANCE_WORK_MEM
+            - name: POSTGRES_EFFECTIVE_CACHE_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-common-config
+                  key: POSTGRES_EFFECTIVE_CACHE_SIZE
+            - name: POSTGRES_STATEMENT_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-common-config
+                  key: POSTGRES_STATEMENT_TIMEOUT
+            - name: POSTGRES_IDLE_IN_TRANSACTION_SESSION_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: dify-plus-common-config
+                  key: POSTGRES_IDLE_IN_TRANSACTION_SESSION_TIMEOUT
+
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres-db-files # [新增] 使用子路径，隔离 lost+found
+
+          # 探针配置保持不变 (你的配置是正确的)
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -h
+                - localhost
+                - -U
+                - postgres
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -h
+                - localhost
+                - -U
+                - postgres
+                - -d
+                - dify
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "2000m"
+
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        storageClassName: longhorn
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi

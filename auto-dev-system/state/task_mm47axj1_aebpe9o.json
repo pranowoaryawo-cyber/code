@@ -1,0 +1,127 @@
+{
+  "id": "task_mm47axj1_aebpe9o",
+  "description": "创建一个 React Todo 应用",
+  "priority": 1,
+  "status": "completed",
+  "subTasks": [
+    {
+      "id": "subtask_mm47axj1_zn7xfuk",
+      "description": "创建项目结构",
+      "dependencies": [],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:15:53.540Z",
+      "result": {
+        "created": true
+      },
+      "endTime": "2026-02-27T01:15:53.540Z",
+      "actualDuration": 0
+    },
+    {
+      "id": "subtask_mm47axj1_isnibkf",
+      "description": "安装依赖",
+      "dependencies": [
+        "subtask_mm47axj1_zn7xfuk"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:15:53.540Z",
+      "result": {
+        "installed": true
+      },
+      "endTime": "2026-02-27T01:15:53.540Z",
+      "actualDuration": 0
+    },
+    {
+      "id": "subtask_mm47axj1_6d0emar",
+      "description": "创建组件",
+      "dependencies": [
+        "subtask_mm47axj1_isnibkf"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:15:53.540Z",
+      "result": {
+        "created": true
+      },
+      "endTime": "2026-02-27T01:15:53.540Z",
+      "actualDuration": 0
+    },
+    {
+      "id": "subtask_mm47axj1_hs4gnl7",
+      "description": "实现业务逻辑",
+      "dependencies": [
+        "subtask_mm47axj1_6d0emar"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:15:53.540Z",
+      "result": {
+        "code": "// Generated code for: 实现业务逻辑\n// TODO: Implement"
+      },
+      "endTime": "2026-02-27T01:15:53.540Z",
+      "actualDuration": 0
+    },
+    {
+      "id": "subtask_mm47axj1_8wo27q0",
+      "description": "添加样式",
+      "dependencies": [
+        "subtask_mm47axj1_6d0emar"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:15:53.540Z",
+      "result": {
+        "code": "// Generated code for: 添加样式\n// TODO: Implement"
+      },
+      "endTime": "2026-02-27T01:15:53.540Z",
+      "actualDuration": 0
+    },
+    {
+      "id": "subtask_mm47axj1_d657oyg",
+      "description": "编写测试",
+      "dependencies": [
+        "subtask_mm47axj1_hs4gnl7"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:15:53.540Z",
+      "result": {
+        "passed": true,
+        "tests": 0,
+        "failures": 0
+      },
+      "endTime": "2026-02-27T01:15:53.540Z",
+      "actualDuration": 0
+    },
+    {
+      "id": "subtask_mm47axj1_e7sx4g8",
+      "description": "构建项目",
+      "dependencies": [
+        "subtask_mm47axj1_d657oyg",
+        "subtask_mm47axj1_8wo27q0"
+      ],
+      "status": "completed",
+      "retryCount": 0,
+      "maxRetries": 3,
+      "startTime": "2026-02-27T01:15:53.540Z",
+      "result": {
+        "built": true,
+        "outputDir": "dist"
+      },
+      "endTime": "2026-02-27T01:15:53.541Z",
+      "actualDuration": 0.001
+    }
+  ],
+  "context": {},
+  "checkpoints": [],
+  "createdAt": "2026-02-27T01:15:53.533Z",
+  "updatedAt": "2026-02-27T01:15:53.541Z",
+  "completedAt": "2026-02-27T01:15:53.541Z"
+}

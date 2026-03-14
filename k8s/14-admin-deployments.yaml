@@ -1,0 +1,144 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-web
+  namespace: dify-plus
+  labels:
+    app.kubernetes.io/name: admin-web
+    app.kubernetes.io/component: admin-frontend
+    app.kubernetes.io/part-of: dify-plus
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: admin-web
+      app.kubernetes.io/component: admin-frontend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: admin-web
+        app.kubernetes.io/component: admin-frontend
+        app.kubernetes.io/part-of: dify-plus
+    spec:
+      containers:
+        - name: admin-web
+          image: harbor.hkbluelans.com/dify/dify-plus-admin-web:1.11.4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          command:
+            - nginx-debug
+            - -g
+            - daemon off;
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-server
+  namespace: dify-plus
+  labels:
+    app.kubernetes.io/name: admin-server
+    app.kubernetes.io/component: admin-backend
+    app.kubernetes.io/part-of: dify-plus
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: admin-server
+      app.kubernetes.io/component: admin-backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: admin-server
+        app.kubernetes.io/component: admin-backend
+        app.kubernetes.io/part-of: dify-plus
+    spec:
+      containers:
+        - name: admin-server
+          image: harbor.hkbluelans.com/dify/dify-plus-admin-server:1.11.4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8888
+              protocol: TCP
+          env:
+            - name: JWT_SIGNING_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dify-plus-secrets
+                  key: JWT_SIGNING_KEY
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dify-plus-secrets
+                  key: SECRET_KEY
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dify-plus-secrets
+                  key: DB_PASSWORD
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dify-plus-secrets
+                  key: REDIS_PASSWORD
+          volumeMounts:
+            - name: admin-config
+              mountPath: /app/config.docker.yaml
+              subPath: config.docker.yaml
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8888
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8888
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+      volumes:
+        - name: admin-config
+          configMap:
+            name: admin-server-config
